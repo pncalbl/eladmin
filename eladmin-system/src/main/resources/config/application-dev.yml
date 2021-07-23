@@ -6,7 +6,7 @@ spring:
       driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
       url: jdbc:log4jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:eladmin}?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
       username: ${DB_USER:root}
-      password: ${DB_PWD:123456}
+      password: ${DB_PWD:root}
       # 初始连接数
       initial-size: 5
       # 最小连接数
@@ -53,17 +53,17 @@ spring:
 login:
   # 登录缓存
   cache-enable: true
-  #  是否限制单用户登录
+  # 是否限制单用户登录
   single-login: false
-  #  验证码
+  # 验证码
   login-code:
-    #  验证码类型配置 查看 LoginProperties 类
+    # 验证码类型配置 查看 LoginProperties 类
     code-type: arithmetic
-    #  登录图形验证码有效时间/分钟
+    # 登录图形验证码有效时间/分钟
     expiration: 2
-    #  验证码高度
+    # 验证码高度
     width: 111
-    #  验证码宽度
+    # 验证码宽度
     height: 36
     # 内容长度
     length: 2

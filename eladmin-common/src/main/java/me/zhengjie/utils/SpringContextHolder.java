@@ -36,8 +36,8 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
     private static boolean addCallback = true;
 
     /**
-     * 针对 某些初始化方法，在SpringContextHolder 未初始化时 提交回调方法。
-     * 在SpringContextHolder 初始化后，进行回调使用
+     * 针对某些初始化方法，在 SpringContextHolder 未初始化时提交回调方法。
+     * 在 SpringContextHolder 初始化后，进行回调使用
      *
      * @param callBack 回调函数
      */
@@ -51,7 +51,7 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
     }
 
     /**
-     * 从静态变量applicationContext中取得Bean, 自动转型为所赋值对象的类型.
+     * 从静态变量 applicationContext 中取得 Bean, 自动转型为所赋值对象的类型.
      */
     @SuppressWarnings("unchecked")
     public static <T> T getBean(String name) {
@@ -60,7 +60,7 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
     }
 
     /**
-     * 从静态变量applicationContext中取得Bean, 自动转型为所赋值对象的类型.
+     * 从静态变量 applicationContext 中取得Bean, 自动转型为所赋值对象的类型.
      */
     public static <T> T getBean(Class<T> requiredType) {
         assertContextInjected();
@@ -68,7 +68,7 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
     }
 
     /**
-     * 获取SpringBoot 配置信息
+     * 获取 SpringBoot 配置信息
      *
      * @param property     属性key
      * @param defaultValue 默认值
@@ -84,7 +84,7 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
     }
 
     /**
-     * 获取SpringBoot 配置信息
+     * 获取 SpringBoot 配置信息
      *
      * @param property 属性key
      * @return /
@@ -105,17 +105,17 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
     }
 
     /**
-     * 检查ApplicationContext不为空.
+     * 检查 ApplicationContext 不为空.
      */
     private static void assertContextInjected() {
         if (applicationContext == null) {
-            throw new IllegalStateException("applicaitonContext属性未注入, 请在applicationContext" +
+            throw new IllegalStateException("applicationContext属性未注入, 请在applicationContext" +
                     ".xml中定义SpringContextHolder或在SpringBoot启动类中注册SpringContextHolder.");
         }
     }
 
     /**
-     * 清除SpringContextHolder中的ApplicationContext为Null.
+     * 清除 SpringContextHolder 中的 ApplicationContext 为 null.
      */
     private static void clearHolder() {
         log.debug("清除SpringContextHolder中的ApplicationContext:"

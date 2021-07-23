@@ -52,7 +52,7 @@ public class AsyncTaskExecutePool implements AsyncConfigurer {
         executor.setKeepAliveSeconds(config.getKeepAliveSeconds());
         //线程名字前缀
         executor.setThreadNamePrefix("el-async-");
-        // setRejectedExecutionHandler：当pool已经达到max size的时候，如何处理新任务
+        // setRejectedExecutionHandler：当 pool 已经达到 max-size 的时候，如何处理新任务
         // CallerRunsPolicy：不在新线程中执行任务，而是由调用者所在的线程来执行
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         executor.initialize();
