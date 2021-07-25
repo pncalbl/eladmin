@@ -103,7 +103,7 @@ public class AuthorizationController {
             put("user", jwtUserDto);
         }};
         if (loginProperties.isSingleLogin()) {
-            //踢掉之前已经登录的token
+            // 踢掉之前已经登录的token
             onlineUserService.checkLoginOnUser(authUser.getUsername(), token);
         }
         return ResponseEntity.ok(authInfo);

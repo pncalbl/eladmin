@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * 定时任务配置
+ *
  * @author /
  * @date 2019-01-07
  */
@@ -56,16 +57,17 @@ public class QuartzConfig {
 
 	/**
 	 * 注入scheduler到spring
+	 *
 	 * @param quartzJobFactory /
 	 * @return Scheduler
 	 * @throws Exception /
 	 */
 	@Bean(name = "scheduler")
 	public Scheduler scheduler(QuartzJobFactory quartzJobFactory) throws Exception {
-		SchedulerFactoryBean factoryBean=new SchedulerFactoryBean();
+		SchedulerFactoryBean factoryBean = new SchedulerFactoryBean();
 		factoryBean.setJobFactory(quartzJobFactory);
 		factoryBean.afterPropertiesSet();
-		Scheduler scheduler=factoryBean.getScheduler();
+		Scheduler scheduler = factoryBean.getScheduler();
 		scheduler.start();
 		return scheduler;
 	}

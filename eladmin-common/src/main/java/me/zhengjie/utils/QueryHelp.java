@@ -56,7 +56,7 @@ public class QueryHelp {
             List<Field> fields = getAllFields(query.getClass(), new ArrayList<>());
             for (Field field : fields) {
                 boolean accessible = field.isAccessible();
-                // 设置对象的访问权限，保证对private的属性的访
+                // 设置对象的访问权限，保证对private的属性的访问
                 field.setAccessible(true);
                 Query q = field.getAnnotation(Query.class);
                 if (q != null) {
