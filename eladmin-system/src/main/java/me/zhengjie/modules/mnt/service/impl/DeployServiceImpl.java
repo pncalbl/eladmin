@@ -43,6 +43,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
@@ -115,7 +116,7 @@ public class DeployServiceImpl implements DeployService {
 
 	/**
 	 * @param fileSavePath 本机路径
-	 * @param id ID
+	 * @param id           ID
 	 */
 	private void deployApp(String fileSavePath, Long id) {
 
@@ -158,7 +159,7 @@ public class DeployServiceImpl implements DeployService {
 				stopApp(port, executeShellUtil);
 				sendMsg("备份原来应用", MsgType.INFO);
 				//备份应用
-				backupApp(executeShellUtil, ip, app.getDeployPath()+FILE_SEPARATOR, app.getName(), app.getBackupPath()+FILE_SEPARATOR, id);
+				backupApp(executeShellUtil, ip, app.getDeployPath() + FILE_SEPARATOR, app.getName(), app.getBackupPath() + FILE_SEPARATOR, id);
 			}
 			sendMsg("部署应用", MsgType.INFO);
 			//部署文件,并启动应用
@@ -166,12 +167,12 @@ public class DeployServiceImpl implements DeployService {
 			executeShellUtil.execute(deployScript);
 			sleep(3);
 			sendMsg("应用部署中，请耐心等待部署结果，或者稍后手动查看部署状态", MsgType.INFO);
-			int i  = 0;
+			int i = 0;
 			boolean result = false;
 			// 由于启动应用需要时间，所以需要循环获取状态，如果超过30次，则认为是启动失败
-			while (i++ < count){
+			while (i++ < count) {
 				result = checkIsRunningStatus(port, executeShellUtil);
-				if(result){
+				if (result) {
 					break;
 				}
 				// 休眠6秒
@@ -185,9 +186,9 @@ public class DeployServiceImpl implements DeployService {
 
 	private void sleep(int second) {
 		try {
-			Thread.sleep(second * 1000);
+			Thread.sleep(second * 1000L);
 		} catch (InterruptedException e) {
-			log.error(e.getMessage(),e);
+			log.error(e.getMessage(), e);
 		}
 	}
 
@@ -198,7 +199,7 @@ public class DeployServiceImpl implements DeployService {
 		sb.append("mkdir -p ").append(backupPath);
 		sb.append("mv -f ").append(fileSavePath);
 		sb.append(appName).append(" ").append(backupPath);
-		log.info("备份应用脚本:" + sb.toString());
+		log.info("备份应用脚本:" + sb);
 		executeShellUtil.execute(sb.toString());
 		//还原信息入库
 		DeployHistory deployHistory = new DeployHistory();
@@ -212,7 +213,7 @@ public class DeployServiceImpl implements DeployService {
 	/**
 	 * 停App
 	 *
-	 * @param port 端口
+	 * @param port             端口
 	 * @param executeShellUtil /
 	 */
 	private void stopApp(int port, ExecuteShellUtil executeShellUtil) {
@@ -224,20 +225,20 @@ public class DeployServiceImpl implements DeployService {
 	/**
 	 * 指定端口程序是否在运行
 	 *
-	 * @param port 端口
+	 * @param port             端口
 	 * @param executeShellUtil /
 	 * @return true 正在运行  false 已经停止
 	 */
 	private boolean checkIsRunningStatus(int port, ExecuteShellUtil executeShellUtil) {
 		String result = executeShellUtil.executeForResult(String.format("fuser -n tcp %d", port));
-		return result.indexOf("/tcp:")>0;
+		return result.indexOf("/tcp:") > 0;
 	}
 
 	private void sendMsg(String msg, MsgType msgType) {
 		try {
 			WebSocketServer.sendInfo(new SocketMsg(msg, msgType), "deploy");
 		} catch (IOException e) {
-			log.error(e.getMessage(),e);
+			log.error(e.getMessage(), e);
 		}
 	}
 
@@ -265,11 +266,12 @@ public class DeployServiceImpl implements DeployService {
 
 	private boolean checkFile(ExecuteShellUtil executeShellUtil, AppDto appDTO) {
 		String result = executeShellUtil.executeForResult("find " + appDTO.getDeployPath() + " -name " + appDTO.getName());
-		return result.indexOf(appDTO.getName())>0;
+		return result.indexOf(appDTO.getName()) > 0;
 	}
 
 	/**
 	 * 启动服务
+	 *
 	 * @param resources /
 	 * @return /
 	 */
@@ -287,12 +289,12 @@ public class DeployServiceImpl implements DeployService {
 			executeShellUtil.execute(app.getStartScript());
 			sleep(3);
 			sendMsg("应用启动中，请耐心等待启动结果，或者稍后手动查看运行状态", MsgType.INFO);
-			int i  = 0;
+			int i = 0;
 			boolean result = false;
 			// 由于启动应用需要时间，所以需要循环获取状态，如果超过30次，则认为是启动失败
-			while (i++ < count){
+			while (i++ < count) {
 				result = checkIsRunningStatus(app.getPort(), executeShellUtil);
-				if(result){
+				if (result) {
 					break;
 				}
 				// 休眠6秒
@@ -307,6 +309,7 @@ public class DeployServiceImpl implements DeployService {
 
 	/**
 	 * 停止服务
+	 *
 	 * @param resources /
 	 * @return /
 	 */
@@ -346,7 +349,7 @@ public class DeployServiceImpl implements DeployService {
 			sendMsg("应用信息不存在：" + resources.getAppName(), MsgType.ERROR);
 			throw new BadRequestException("应用信息不存在：" + resources.getAppName());
 		}
-		String backupPath = app.getBackupPath()+FILE_SEPARATOR;
+		String backupPath = app.getBackupPath() + FILE_SEPARATOR;
 		backupPath += resources.getAppName() + FILE_SEPARATOR + deployDate;
 		//这个是服务器部署路径
 		String deployPath = app.getDeployPath();
@@ -369,12 +372,12 @@ public class DeployServiceImpl implements DeployService {
 		sendMsg("启动应用", MsgType.INFO);
 		executeShellUtil.execute(app.getStartScript());
 		sendMsg("应用启动中，请耐心等待启动结果，或者稍后手动查看启动状态", MsgType.INFO);
-		int i  = 0;
+		int i = 0;
 		boolean result = false;
 		// 由于启动应用需要时间，所以需要循环获取状态，如果超过30次，则认为是启动失败
-		while (i++ < count){
+		while (i++ < count) {
 			result = checkIsRunningStatus(app.getPort(), executeShellUtil);
-			if(result){
+			if (result) {
 				break;
 			}
 			// 休眠6秒
@@ -393,7 +396,7 @@ public class DeployServiceImpl implements DeployService {
 			sendMsg("IP对应服务器信息不存在：" + ip, MsgType.ERROR);
 			throw new BadRequestException("IP对应服务器信息不存在：" + ip);
 		}
-		return new ExecuteShellUtil(ip, serverDeployDTO.getAccount(), serverDeployDTO.getPassword(),serverDeployDTO.getPort());
+		return new ExecuteShellUtil(ip, serverDeployDTO.getAccount(), serverDeployDTO.getPassword(), serverDeployDTO.getPort());
 	}
 
 	private ScpClientUtil getScpClientUtil(String ip) {
@@ -419,7 +422,7 @@ public class DeployServiceImpl implements DeployService {
 	public void download(List<DeployDto> queryAll, HttpServletResponse response) throws IOException {
 		List<Map<String, Object>> list = new ArrayList<>();
 		for (DeployDto deployDto : queryAll) {
-			Map<String,Object> map = new LinkedHashMap<>();
+			Map<String, Object> map = new LinkedHashMap<>();
 			map.put("应用名称", deployDto.getApp().getName());
 			map.put("服务器", deployDto.getServers());
 			map.put("部署日期", deployDto.getCreateTime());
