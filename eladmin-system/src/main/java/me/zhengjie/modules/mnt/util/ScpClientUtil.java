@@ -31,7 +31,7 @@ import java.util.logging.Logger;
  */
 public class ScpClientUtil {
 
-	static private Map<String,ScpClientUtil> instance = Maps.newHashMap();
+	static private final Map<String,ScpClientUtil> instance = Maps.newHashMap();
 
 	static synchronized public ScpClientUtil getInstance(String ip, int port, String username, String password) {
 		if (instance.get(ip) == null) {
@@ -96,10 +96,10 @@ public class ScpClientUtil {
 		}
 	}
 
-	private String ip;
-	private int port;
-	private String username;
-	private String password;
+	private final String ip;
+	private final int port;
+	private final String username;
+	private final String password;
 
 
 }
